@@ -15,6 +15,7 @@ Um sich mit phpMyAdmin an einer MySQL-Datenbank anzumelden, sind zwingend deren 
 ## Installation
 1. kopieren Sie die Datei `lc-sso.php` in das Hauptverzeichnis der phpMyAdmin-Installation
 2. bearbeiten Sie die Datei `config.inc.php` und fügen einen neuen "Server" hinzu:
+
 ```javascript
 $i++;
 $cfg['Servers'][$i]['auth_type'] = 'signon';
@@ -22,7 +23,9 @@ $cfg['Servers'][$i]['host'] = '';
 $cfg['Servers'][$i]['SignonSession'] = 'SignonSession';
 $cfg['Servers'][$i]['SignonURL'] = 'lc-sso.php';
 ```
+
    Merken Sie sich die Nummer (Wert von `$i`) dieses neuen Server-Eintrags!
+
 3. bearbeiten Sie die Datei `lc-sso.php` und setzen `PMA_SIGNON_INDEX` auf die Server-ID (`$i`) des neuen Eintrags
 4. wenn Sie den `SignonSession`-Namen in der Datei `config.inc.php` geändert haben, passen Sie die Einstellung `PMA_SIGNON_SESSIONNAME` entsprechend an
 5. wenn Sie LiveConfig mit einem SSL-Zertifikat einer vertrauenswürdigen CA verwenden, sollten Sie die Einstellung `PMA_DISABLE_SSL_PEER_VALIDATION` auf `FALSE` setzen

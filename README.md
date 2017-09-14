@@ -15,6 +15,7 @@ To connect with phpMyAdmin to a MySQL server, usually the database credentials a
 ## Installation
 1. copy the file `lc-sso.php` into the root directory of your phpMyAdmin installation
 2. edit the file `config.inc.php` and add a new server:
+
 ```javascript
 $i++;
 $cfg['Servers'][$i]['auth_type'] = 'signon';
@@ -22,7 +23,9 @@ $cfg['Servers'][$i]['host'] = '';
 $cfg['Servers'][$i]['SignonSession'] = 'SignonSession';
 $cfg['Servers'][$i]['SignonURL'] = 'lc-sso.php';
 ```
+
    Remember the number (value of `$i`) of this new server entry!
+
 3. edit the file `lc-sso.php` and set `PMA_SIGNON_INDEX` to the server id (`$i`) of the previously added entry
 4. if you have changed the `SignonSession` name in `config.inc.php`, also adjust `PMA_SIGNON_SESSIONNAME` accordingly
 5. if you're running LiveConfig with a SSL certificate of a trusted CA, you should set `PMA_DISABLE_SSL_PEER_VALIDATION` to `FALSE`

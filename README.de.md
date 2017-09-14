@@ -15,7 +15,7 @@ Um sich mit phpMyAdmin an einer MySQL-Datenbank anzumelden, sind zwingend deren 
 ## Installation
 1. kopieren Sie die Datei `lc-sso.php` in das Hauptverzeichnis der phpMyAdmin-Installation
 2. bearbeiten Sie die Datei `config.inc.php` und fügen einen neuen "Server" hinzu:
-   ```javascript
+```javascript
 $i++;
 $cfg['Servers'][$i]['auth_type'] = 'signon';
 $cfg['Servers'][$i]['host'] = '';

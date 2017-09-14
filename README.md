@@ -15,7 +15,7 @@ To connect with phpMyAdmin to a MySQL server, usually the database credentials a
 ## Installation
 1. copy the file `lc-sso.php` into the root directory of your phpMyAdmin installation
 2. edit the file `config.inc.php` and add a new server:
-   ```javascript
+```javascript
 $i++;
 $cfg['Servers'][$i]['auth_type'] = 'signon';
 $cfg['Servers'][$i]['host'] = '';

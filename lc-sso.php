@@ -123,7 +123,6 @@ if (isset($_POST['local_token'])) {
   $_SESSION['PMA_single_signon_password'] = $json_result['password'];
   $_SESSION['PMA_single_signon_host'] = defined("PMA_SIGNON_HOST") ? PMA_SIGNON_HOST : $json_result['hostname'];
   # $_SESSION['PMA_single_signon_port'] = '3306';
-  $id = session_id();
   // close that session
   @session_write_close();
   // Redirect to phpMyAdmin

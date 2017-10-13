@@ -21,7 +21,8 @@ $i++;
 $cfg['Servers'][$i]['auth_type'] = 'signon';
 $cfg['Servers'][$i]['host'] = '';
 $cfg['Servers'][$i]['SignonSession'] = 'SignonSession';
-$cfg['Servers'][$i]['SignonURL'] = 'lc-sso.php';
+$cfg['Servers'][$i]['SignonURL'] = 'index.php';
+$cfg['Servers'][$i]['LogoutURL'] = 'lc-sso.php?logout';
 ```
 
    Merken Sie sich die Nummer (Wert von `$i`) dieses neuen Server-Eintrags!

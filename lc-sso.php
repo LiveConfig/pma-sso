@@ -21,7 +21,8 @@
 #        $cfg['Servers'][$i]['auth_type'] = 'signon';
 #        $cfg['Servers'][$i]['host'] = '';
 #        $cfg['Servers'][$i]['SignonSession'] = 'SignonSession';
-#        $cfg['Servers'][$i]['SignonURL'] = 'lc-sso.php';
+#        $cfg['Servers'][$i]['SignonURL'] = 'index.php';
+#        $cfg['Servers'][$i]['LogoutURL'] = 'lc-sso.php?logout';
 #     Remember the number ($i) of this new Servers entry!
 # 3.) edit this script (lc-sso.php) and set PMA_SIGNON_INDEX to this Server ID
 # 3a) if you change the "SignonSession" name in config.inc.php, then also
@@ -78,6 +79,14 @@ define('PMA_DISABLE_SSL_PEER_VALIDATION', TRUE);
 
 session_name(PMA_SIGNON_SESSIONNAME);
 @session_start();
+
+if (isset($_GET['logout'])) {
+  $params = session_get_cookie_params();
+  setcookie(session_name(), '', time() - 86400, $params["path"], $params["domain"], $params["secure"], $params["httponly"] );
+  session_destroy();
+  header('Location: index.php');
+  return;
+}
 
 if (isset($_POST['local_token'])) {
   $host = $_POST['lc_host'];

@@ -19,7 +19,7 @@ To connect with phpMyAdmin to a MySQL server, usually the database credentials a
 ```javascript
 $i++;
 $cfg['Servers'][$i]['auth_type'] = 'signon';
-$cfg['Servers'][$i]['host'] = '';
+$cfg['Servers'][$i]['host'] = 'SingleSignOn';
 $cfg['Servers'][$i]['SignonSession'] = 'SignonSession';
 $cfg['Servers'][$i]['SignonURL'] = 'index.php';
 $cfg['Servers'][$i]['LogoutURL'] = 'lc-sso.php?logout';

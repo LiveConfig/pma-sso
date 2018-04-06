@@ -4,7 +4,7 @@
 # | |__| \ V / -_) (__/ _ \ ' \|  _| / _` |
 # |____|_|\_/\___|\___\___/_||_|_| |_\__, |
 #                                    |___/
-# Copyright (c) 2016-2017 Keppler IT GmbH.
+# Copyright (c) 2016-2018 Keppler IT GmbH.
 # ----------------------------------------------------------------------------
 # LiveConfig Single Sign-on for phpMyAdmin
 # Source/Documentation: https://github.com/LiveConfig/pma-sso
@@ -95,10 +95,17 @@ if (isset($_POST['local_token'])) {
         . '&request=credentials';
   $result = http_query('post', $host, 'application/x-www-form-urlencoded', $data);
 
-  if ($result['http_status']['code'] !== '200') {
+  if (!$result['status']) {
     $body = "<div class=\"error\">"
           .   "<img class=\"icon ic_s_error\" src=\"themes/dot.gif\" title=\"\" alt=\"\"> "
-          .   "The request to verify the token failed. Please try again!"
+          .   "Communication with LiveConfig server failed: " . htmlspecialchars($result['error'])
+          . "</div>" ;
+    print_page("", $body);
+    return;
+  } elseif ($result['http_status'] !== 200) {
+    $body = "<div class=\"error\">"
+          .   "<img class=\"icon ic_s_error\" src=\"themes/dot.gif\" title=\"\" alt=\"\"> "
+          .   "Token validation failed (status code: " . $result['http_status'] . ") - please check your LiveConfig log"
           . "</div>" ;
     print_page("", $body);
     return;
@@ -269,8 +276,6 @@ function http_query($method, $url, $content_type, $content, $accept_type = "appl
 
   $http_client = curl_init($myurl);
   curl_setopt($http_client, CURLOPT_RETURNTRANSFER, true);
-  curl_setopt($http_client, CURLOPT_HEADER, true);
-  curl_setopt($http_client, CURLINFO_HEADER_OUT, true);
   curl_setopt($http_client, CURLOPT_PROTOCOLS, CURLPROTO_HTTPS | CURLPROTO_HTTP);
   curl_setopt($http_client, CURLOPT_CUSTOMREQUEST, strtoupper($method));
   curl_setopt($http_client, CURLOPT_TIMEOUT, 300);
@@ -285,51 +290,13 @@ function http_query($method, $url, $content_type, $content, $accept_type = "appl
   curl_setopt($http_client, CURLOPT_HTTPHEADER, $header);
 
   $result = curl_exec($http_client);
-  if($result === false) {
-    return false;
+  if ($result === false) {
+    return array('status' => false, 'error' => curl_error($http_client));
   }
 
-  $header_size = curl_getinfo($http_client, CURLINFO_HEADER_SIZE);
-  $content_size = strlen($result) - $header_size;
+  $info = curl_getinfo($http_client);
 
-  $header = substr($result, 0, strlen($result)-$content_size);
-  $body = substr($result, strlen($result)-$content_size);
-
-  list($header_arr, $http_status_code) = parse_headers($header);
-
-  return array('http_status' => $http_status_code, 'header' => $header_arr, 'body' => $body);
-}
-
-function parse_headers($header) {
-  $result = array();
-  $lines = explode("\r\n", $header);
-
-  $prev_key = "";
-  $status_code = array();
-
-  foreach($lines as $line) {
-    if (empty($line)) continue;
-
-    if (preg_match('/^HTTP\/\d(?:\.\d)? (\d+) (.*)$/', $line, $matches)) {
-      $status_code = array('code' => $matches[1], 'text' => $matches[2]);
-      continue;
-    }
-
-    list ($key, $value) = explode(":", $line, 2);
-
-    if (!isset($value)) {
-      if (substr($line, 0, 1) == "\t" || substr($line, 0, 1) == " ") {
-        // Folded line
-        if (!empty($prev_key)) { $result[$prev_key] .= " ".trim($line); } // add "value" to previous key value
-      }
-    } else {
-      $key = trim($key);
-      $prev_key = $key;
-      $result[$key] = trim($value);
-    }
-  }
-
-  return array($result, $status_code);
+  return array('status' => true, 'http_status' => $info['http_code'], 'body' => $result);
 }
 
 # <EOF> ----------------------------------------------------------------------

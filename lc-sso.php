@@ -240,7 +240,11 @@ function print_page($head, $body) {
        .    "<link rel=\"stylesheet\" type=\"text/css\" href=\"phpmyadmin.css.php\">"
        .    "<title>LiveConfig PHPMyAdmin Single Sign-On</title>";
   $files = glob("js/jquery/jquery-[0-9].*.min.js");
-  if (!$files) $files = glob("js/jquery/jquery.min.js");
+  if (file_exists("js/vendor/jquery/jquery.min.js")){
+    if (!$files) $files = glob("js/vendor/jquery/jquery.min.js");
+  }else{
+    if (!$files) $files = glob("js/jquery/jquery.min.js");
+  }
   if ($files != FALSE) print "<script src=\"" . $files[0] . "\"></script>";
   print     $head
        .  "</head>"

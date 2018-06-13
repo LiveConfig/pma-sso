@@ -239,8 +239,7 @@ function print_page($head, $body) {
        .  "<head>"
        .    "<link rel=\"stylesheet\" type=\"text/css\" href=\"phpmyadmin.css.php\">"
        .    "<title>LiveConfig PHPMyAdmin Single Sign-On</title>";
-  $files = glob("js/jquery/jquery-[0-9].*.min.js");
-  if (!$files) $files = glob("js/jquery/jquery.min.js");
+  $files = glob("{js/jquery/jquery-[0-9].*.min.js,js/jquery/jquery.min.js,js/vendor/jquery/jquery.min.js}", GLOB_BRACE);
   if ($files != FALSE) print "<script src=\"" . $files[0] . "\"></script>";
   print     $head
        .  "</head>"
